@@ -1,4 +1,3 @@
-Aquí tienes un `README.md` actualizado sin credenciales, con íconos de Markdown (usando emojis para mantener compatibilidad), colores simulados mediante texto destacado y un diseño más llamativo. Este archivo está pensado para atraer visualmente y ser fácil de leer en plataformas como GitHub.
 
 ---
 
