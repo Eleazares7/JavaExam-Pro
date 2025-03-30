@@ -1,243 +1,97 @@
-¡Claro! A continuación te proporciono un archivo `README.md` bien estructurado y detallado para tu proyecto. Este archivo describe el propósito del proyecto, las tecnologías utilizadas, las instrucciones para configurarlo y ejecutarlo, y cómo subirlo a GitHub. El formato está diseñado para que se vea profesional y sea fácil de entender.
+Aquí tienes un README.md actualizado sin credenciales, con íconos de Markdown (usando emojis para mantener compatibilidad), colores simulados mediante texto destacado y un diseño más llamativo. Este archivo está pensado para atraer visualmente y ser fácil de leer en plataformas como GitHub.
 
----
+🌟 Examen de Programación - Java 🌟
+ <!-- Reemplaza con un banner real si lo tienes -->
 
-# Examen de Programación - Java
+¡Bienvenido a Examen de Programación - Java! 🎉 Una aplicación web vibrante y funcional para gestionar exámenes de programación en Java. Los estudiantes resuelven ejercicios en un entorno dinámico, mientras los profesores revisan y califican con estilo. 🚀
 
-![Banner del Proyecto](https://via.placeholder.com/800x200.png?text=Examen+de+Programación+-+Java)  
-*Un sistema de examen en línea para evaluar habilidades de programación en Java.*
+🔗 URL del Proyecto: http://javaexam.infinityfreeapp.com
 
-## Descripción del Proyecto
+✨ Características
+🎓 Para Estudiantes
+🖥️ Editores de código con resaltado básico y números de línea.
+⏳ Temporizador flotante de 400 segundos para mantener la emoción.
+🚫 Restricciones anti-trampas (bloqueo de pegado, cambio de pestaña).
+👨‍🏫 Para Profesores
+📋 Tabla interactiva con respuestas, calificaciones y comentarios.
+📥 Descarga de códigos en formato ZIP con un clic.
+✅ Campos editables para calificar y dejar feedback.
+💾 Almacenamiento
+Respuestas guardadas en MySQL y Firebase Realtime Database para máxima seguridad.
+🛠️ Tecnologías
+🌐 Frontend
+HTML5, CSS3, JavaScript (ES6+) 📝
+Bootstrap 5.3.2 🎨: https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/
+Animate.css 4.1.1 🌟: https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/
+Font Awesome 6.5.1 🖼️: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/
+Google Fonts (Poppins) ✍️: https://fonts.googleapis.com/css2?family=Poppins
+SweetAlert2 11 🚨: https://cdn.jsdelivr.net/npm/sweetalert2@11
+JSZip 3.10.1 📦: https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/
+FileSaver.js 2.0.5 💾: https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/
+⚙️ Backend
+PHP 8.x 🐘: Con extensiones mysqli y PDO.
+MySQL 🗄️: Base de datos relacional en InfinityFree.
+Firebase Realtime Database 8.0.0 🔥: https://www.gstatic.com/firebasejs/8.0.0/
+🚀 Instalación
+📋 Prerrequisitos
+🌍 Navegador moderno (Chrome, Firefox, Edge).
+🌐 Cuenta en InfinityFree para hosting.
+🔥 Proyecto en Firebase con Realtime Database.
+🛠️ Pasos
+Configurar MySQL 🗄️
+Crea una base de datos en InfinityFree.
+Importa las tablas: Usuarios, Alumnos, Profesores, Roles.
+Inserta roles iniciales:
+sql
 
-Este proyecto es un sistema de examen en línea diseñado para evaluar las habilidades de programación en Java de los estudiantes. Los usuarios deben completar un formulario con su nombre, matrícula y dos códigos en Java (uno para calcular la sucesión de Fibonacci y otro para calcular una potencia). El sistema incluye varias funcionalidades para garantizar la integridad del examen, como la detección de cambio de pestaña, la prohibición de pegar texto, y un temporizador. Los datos del formulario se envían a un servidor y se almacenan en una base de datos MySQL alojada en InfinityFree.
+Collapse
 
-### Características Principales
-- **Formulario de Examen**: Los estudiantes ingresan su nombre, matrícula y dos códigos en Java.
-- **Editores de Código**: Incluye dos editores de texto con resaltado de sintaxis y números de línea.
-- **Temporizador**: Un temporizador de 400 segundos que alerta al usuario cuando el tiempo se agota.
-- **Restricciones de Integridad**:
-  - Detecta cambios de pestaña, pérdida de foco (como `Alt + Tab`), o intentos de cerrar la ventana, borrando el código y mostrando una advertencia.
-  - Prohíbe pegar texto en los editores y muestra una alerta si se intenta.
-- **Almacenamiento de Datos**: Los datos del formulario se envían a un script PHP y se almacenan en una base de datos MySQL en InfinityFree.
-- **Notificaciones**: Usa SweetAlert2 para mostrar alertas de éxito, error o advertencia.
+Wrap
 
-## Tecnologías Utilizadas
+Copy
+INSERT INTO Roles (ID, NombreRol) VALUES (1, 'Alumno'), (2, 'Profesor');
+Subir Archivos 📤
+Sube index.html, exam.php, ver_respuestas.php, login.php, register.php, guardar_respuestas.php, guardar_calificacion.php, y script.js al servidor.
+Asegúrate de que las rutas a las APIs sean correctas (ej. ./login.php).
+Configurar Firebase 🔥
+Crea un proyecto en Firebase.
+Agrega las credenciales en firebaseConfig dentro de exam.php.
+Probar ✅
+Visita http://javaexam.infinityfreeapp.com.
+Regístrate o inicia sesión para empezar.
+📖 Uso
+🎓 Estudiantes
+Inicia sesión o regístrate en index.html. 🔑
+Accede a exam.php, elige un ejercicio (Fibonacci o Potencia). 📝
+Escribe tu código y envíalo antes de que el temporizador se agote. ⏰
+👨‍🏫 Profesores
+Inicia sesión en index.html con credenciales de profesor. 🔒
+Ve a ver_respuestas.php. 📋
+Revisa, descarga códigos y califica con estilo. ⭐
+📂 Estructura de Archivos
+index.html 🌐: Login y registro.
+exam.php ✍️: Examen para alumnos.
+ver_respuestas.php 📊: Revisión para profesores.
+login.php 🔑: Autenticación.
+register.php 📝: Registro.
+guardar_respuestas.php 💾: Guardado de respuestas.
+guardar_calificacion.php ✅: Guardado de calificaciones.
+script.js ⚙️: Lógica del examen.
+⚠️ Notas
+⏳ Temporizador: Fijo en 400 segundos, ajustable en exam.php o script.js.
+🎨 Resaltado: Básico, sin sintaxis específica de Java (mejorable con Prism.js).
+🔒 Seguridad: Restricciones del lado del cliente; considera validaciones backend.
+🤝 Contribuciones
+¡Siéntete libre de abrir un pull request o reportar issues! Queremos hacer este proyecto aún más increíble. 🌈
 
-- **Frontend**:
-  - HTML5 y CSS3 (con Bootstrap 5 para el diseño).
-  - JavaScript (para la lógica del cliente).
-  - SweetAlert2 (para notificaciones emergentes).
-- **Backend**:
-  - PHP (para manejar la conexión a la base de datos y guardar los datos).
-- **Base de Datos**:
-  - MySQL con motor InnoDB (alojada en InfinityFree).
-- **Hosting**:
-  - InfinityFree (para alojar el frontend y el script PHP).
+📬 Contacto
+¿Preguntas? ¿Sugerencias? Escribe a tu-email@example.com o visita el proyecto en http://javaexam.infinityfreeapp.com. 📧
 
-## Estructura del Proyecto
+¡Explora, programa y diviértete con Examen de Programación - Java! 🎉
 
-```
-examen-programacion/
-├── index.html          # Página principal del examen
-├── script.js           # Lógica del frontend (JavaScript)
-├── guardar_respuestas.php  # Script PHP para guardar los datos en la base de datos
-└── README.md           # Documentación del proyecto
-```
-
-### Estructura de la Base de Datos
-La base de datos `if0_38626442_javaexam` contiene una tabla llamada `respuestas` con la siguiente estructura:
-
-```sql
-CREATE TABLE respuestas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    matricula VARCHAR(20) NOT NULL,
-    codigo1 TEXT NOT NULL,
-    codigo2 TEXT NOT NULL,
-    fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-
-- `id`: Identificador único de cada registro.
-- `nombre`: Nombre del estudiante.
-- `matricula`: Matrícula del estudiante.
-- `codigo1`: Código del primer editor (Fibonacci).
-- `codigo2`: Código del segundo editor (Potencia).
-- `fecha_envio`: Fecha y hora en que se envió el formulario.
-
-## Requisitos Previos
-
-- Una cuenta en [InfinityFree](https://www.infinityfree.com/) para alojar el proyecto.
-- Acceso a phpMyAdmin en InfinityFree para gestionar la base de datos.
-- Un navegador web moderno (Chrome, Firefox, Edge, etc.).
-- Un cliente FTP (como FileZilla) o el administrador de archivos de InfinityFree para subir los archivos.
-
-## Instalación y Configuración
-
-### 1. Clonar el Repositorio
-Clona este repositorio en tu máquina local:
-
-```bash
-git clone https://github.com/tu-usuario/examen-programacion.git
-cd examen-programacion
-```
-
-(Sustituye `tu-usuario` por tu nombre de usuario de GitHub).
-
-### 2. Configurar la Base de Datos
-1. Inicia sesión en tu cuenta de InfinityFree.
-2. Accede a phpMyAdmin desde el panel de control.
-3. Selecciona la base de datos `if0_38626442_javaexam` (o créala si no existe).
-4. Crea la tabla `respuestas` ejecutando el siguiente comando SQL:
-
-   ```sql
-   CREATE TABLE respuestas (
-       id INT AUTO_INCREMENT PRIMARY KEY,
-       nombre VARCHAR(100) NOT NULL,
-       matricula VARCHAR(20) NOT NULL,
-       codigo1 TEXT NOT NULL,
-       codigo2 TEXT NOT NULL,
-       fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-   ```
-
-### 3. Configurar el Script PHP
-1. Abre el archivo `guardar_respuestas.php` y verifica que las credenciales de la base de datos sean correctas:
-
-   ```php
-   $host = 'sql311.infinityfree.com';
-   $username = 'if0_38626442';
-   $password = 'fg5o0v6wB5';
-   $database = 'if0_38626442_javaexam';
-   ```
-
-   Estas credenciales ya están configuradas según lo que proporcionaste, pero asegúrate de que sean correctas.
-
-2. (Opcional) Si deseas mayor seguridad, usa consultas preparadas en `guardar_respuestas.php` (como se mostró en la sección de notas del código anterior).
-
-### 4. Configurar el Frontend
-1. Abre el archivo `script.js` y actualiza la URL de la solicitud `fetch` para que apunte a tu script PHP en InfinityFree:
-
-   ```javascript
-   const response = await fetch('http://tu-dominio.infinityfreeapp.com/guardar_respuestas.php', {
-   ```
-
-   Sustituye `tu-dominio.infinityfreeapp.com` por el dominio real de tu sitio en InfinityFree (por ejemplo, `mi-examen.infinityfreeapp.com`).
-
-### 5. Subir los Archivos a InfinityFree
-1. Inicia sesión en tu cuenta de InfinityFree.
-2. Ve al administrador de archivos o usa un cliente FTP (como FileZilla).
-3. Sube los archivos `index.html`, `script.js`, y `guardar_respuestas.php` al directorio raíz de tu dominio (generalmente `htdocs`).
-
-### 6. Probar el Proyecto
-1. Abre tu navegador y accede a tu sitio, por ejemplo: `http://tu-dominio.infinityfreeapp.com/index.html`.
-2. Completa el formulario con tu nombre, matrícula y dos códigos en Java.
-3. Haz clic en "Enviar Respuestas".
-4. Verifica que recibas una notificación de éxito y que los datos se hayan guardado en la base de datos (puedes verlo en phpMyAdmin).
-
-## Uso
-
-1. **Acceder al Examen**:
-   - Abre el enlace de tu sitio en un navegador: `http://tu-dominio.infinityfreeapp.com/index.html`.
-   - Verás un formulario con campos para el nombre, matrícula, y dos editores de código.
-
-2. **Completar el Examen**:
-   - Ingresa tu nombre y matrícula.
-   - Selecciona el código a realizar (Fibonacci o Potencia) para ver las instrucciones.
-   - Escribe tus códigos en los editores.
-   - Ten en cuenta las restricciones:
-     - No puedes cambiar de pestaña ni usar `Alt + Tab` (el código se borrará).
-     - No puedes pegar texto en los editores.
-     - Tienes 400 segundos para completar el examen.
-
-3. **Enviar las Respuestas**:
-   - Haz clic en "Enviar Respuestas".
-   - Si todo está correcto, verás una notificación de éxito y los datos se guardarán en la base de datos.
-
-4. **Verificar los Datos**:
-   - Accede a phpMyAdmin en InfinityFree.
-   - Consulta la tabla `respuestas` para ver las respuestas enviadas:
-
-     ```sql
-     SELECT * FROM respuestas;
-     ```
-
-## Subir el Proyecto a GitHub
-
-### 1. Inicializar un Repositorio Git
-En la carpeta de tu proyecto, ejecuta los siguientes comandos:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: Sistema de examen de programación en Java"
-```
-
-### 2. Crear un Repositorio en GitHub
-1. Ve a [GitHub](https://github.com) e inicia sesión.
-2. Haz clic en el botón "+" en la esquina superior derecha y selecciona "New repository".
-3. Dale un nombre al repositorio (por ejemplo, `examen-programacion`), selecciona si será público o privado, y crea el repositorio.
-
-### 3. Conectar tu Repositorio Local con GitHub
-Sigue las instrucciones que GitHub te proporciona después de crear el repositorio. Por ejemplo:
-
-```bash
-git remote add origin https://github.com/tu-usuario/examen-programacion.git
-git branch -M main
-git push -u origin main
-```
-
-Sustituye `tu-usuario` por tu nombre de usuario de GitHub.
-
-### 4. Verificar en GitHub
-- Ve a tu repositorio en GitHub (`https://github.com/tu-usuario/examen-programacion`).
-- Asegúrate de que todos los archivos, incluido el `README.md`, estén presentes.
-
-## Notas y Mejoras Futuras
-
-- **Seguridad**:
-  - Usa consultas preparadas en PHP para prevenir inyecciones SQL (ya se proporcionó una versión con consultas preparadas en el código).
-  - Agrega autenticación para que solo usuarios autorizados puedan enviar respuestas.
-  - Configura HTTPS en InfinityFree para proteger los datos en tránsito.
-- **CORS**:
-  - Restringe el acceso CORS a tu dominio específico en `guardar_respuestas.php`:
-    ```php
-    header('Access-Control-Allow-Origin: http://tu-dominio.infinityfreeapp.com');
-    ```
-- **Mejoras en la Interfaz**:
-  - Agrega un diseño más atractivo para los editores de código.
-  - Incluye un sistema de puntuación automática para evaluar los códigos.
-- **Escalabilidad**:
-  - Si el proyecto crece, considera migrar a un hosting más robusto que InfinityFree, ya que tiene limitaciones en recursos y velocidad.
-
-## Contribuciones
-
-¡Las contribuciones son bienvenidas! Si deseas contribuir:
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -m "Agrega nueva funcionalidad"`).
-4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
-5. Crea un Pull Request en GitHub.
-
-## Licencia
-
-Este proyecto está licenciado bajo la [Licencia MIT](LICENSE). Siéntete libre de usarlo y modificarlo según tus necesidades.
-
-## Contacto
-
-Si tienes preguntas o necesitas ayuda, puedes contactarme en:
-- **Correo**: tu-correo@example.com
-- **GitHub**: [tu-usuario](https://github.com/tu-usuario)
-
----
-
-*Desarrollado con ❤️ por [José Eleazar Hernández Hernández].*
-
----
-
-### Notas para personalizar el README
-- **Banner del Proyecto**: El enlace `https://via.placeholder.com/800x200.png?text=Examen+de+Programación+-+Java` es un placeholder. Puedes crear un banner personalizado para tu proyecto (por ejemplo, usando Canva) y subirlo a GitHub o a otro servicio de alojamiento de imágenes, luego actualiza el enlace.
-- **Sustituye datos personales**:
-  - Cambia `tu-usuario` por tu nombre de usuario de GitHub.
-  - Cambia `tu-correo@example.com` por tu correo real.
-  - Cambia `tu-nombre` por tu nombre real.
+Cambios realizados:
+Íconos: Uso de emojis (🌟, 🚀, 🎓, etc.) para dar vida y color al texto.
+Colores simulados: Títulos en negritas (**) y palabras clave destacadas para simular énfasis visual.
+Diseño atractivo: Secciones separadas con líneas (---), listas con emojis y un tono amigable.
+Sin credenciales: Omití las credenciales de MySQL y Firebase como solicitaste.
+Llamativo: Añadí frases como "¡Explora, programa y diviértete!" y emojis festivos (🎉, 🌈) para captar atención.
