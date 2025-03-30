@@ -1,51 +1,88 @@
 <?php
-// Configuración de la conexión a MySQL
+header('Content-Type: application/json');
+
+// Iniciar la sesión para acceder a los datos del usuario
+session_start();
+
+// Verificar si hay una sesión activa y si el usuario es un alumno
+if (!isset($_SESSION['user']) || !isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
+    echo json_encode(["status" => "error", "message" => "No hay una sesión activa o el usuario no es un alumno"]);
+    exit();
+}
+
+// Conexión a la base de datos
 $host = 'sql311.infinityfree.com';
 $username = 'if0_38626442';
 $password = 'fg5o0v6wB5';
 $database = 'if0_38626442_javaexam';
 
-// Crear la conexión
 $conn = new mysqli($host, $username, $password, $database);
 
-// Verificar la conexión
+// Verificar conexión
 if ($conn->connect_error) {
-    die(json_encode(['error' => 'Error al conectar a la base de datos: ' . $conn->connect_error]));
+    echo json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
+    exit();
 }
 
-// Configurar el encabezado para permitir CORS (necesario para solicitudes desde el frontend)
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Permitir solicitudes desde cualquier origen
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
+// Establecer el charset para evitar problemas con caracteres especiales
+$conn->set_charset("utf8");
 
-// Leer los datos enviados desde el frontend
+// Validar método POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(["status" => "error", "message" => "Método no permitido"]);
+    exit();
+}
+
+// Leer datos del request
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Verificar que todos los campos estén presentes
-if (!isset($data['nombre']) || !isset($data['matricula']) || !isset($data['code1']) || !isset($data['code2'])) {
-    echo json_encode(['error' => 'Todos los campos son requeridos']);
-    http_response_code(400);
-    exit;
+// Validar que los datos existen
+if (!isset($data['code1'], $data['code2'])) {
+    echo json_encode(["status" => "error", "message" => "Datos incompletos"]);
+    exit();
 }
 
-// Escapar los datos para prevenir inyecciones SQL
-$nombre = $conn->real_escape_string($data['nombre']);
-$matricula = $conn->real_escape_string($data['matricula']);
-$code1 = $conn->real_escape_string($data['code1']);
-$code2 = $conn->real_escape_string($data['code2']);
+// Escapar los datos para evitar inyecciones SQL
+$codigo1 = $conn->real_escape_string($data['code1']);
+$codigo2 = $conn->real_escape_string($data['code2']);
+$fecha_envio = date('Y-m-d H:i:s'); // Agregar la fecha actual
 
-// Preparar la consulta SQL para insertar los datos
-$query = "INSERT INTO respuestas (nombre, matricula, codigo1, codigo2) VALUES ('$nombre', '$matricula', '$code1', '$code2')";
+// Obtener el correo del usuario desde la sesión
+$correo = $_SESSION['user']['correo'];
 
-// Ejecutar la consulta
-if ($conn->query($query) === TRUE) {
-    echo json_encode(['message' => 'Respuestas guardadas correctamente']);
-    http_response_code(200);
+// Buscar el ID del usuario en la tabla Usuarios usando el correo
+$sql = "SELECT ID FROM Usuarios WHERE correo = '$correo'";
+$result = $conn->query($sql);
+
+if ($result->num_rows === 0) {
+    echo json_encode(["status" => "error", "message" => "Usuario no encontrado en la tabla Usuarios"]);
+    $conn->close();
+    exit();
+}
+
+$row = $result->fetch_assoc();
+$userId = $row['ID'];
+
+// Buscar el registro del alumno en la tabla Alumnos usando el ID del usuario
+$sql = "SELECT * FROM Alumnos WHERE IdUsuario = '$userId'";
+$result = $conn->query($sql);
+
+if ($result->num_rows === 0) {
+    echo json_encode(["status" => "error", "message" => "Alumno no encontrado en la tabla Alumnos"]);
+    $conn->close();
+    exit();
+}
+
+// Actualizar los campos codigo1 y codigo2 en la tabla Alumnos
+$sql = "UPDATE Alumnos 
+        SET codigo1 = '$codigo1', codigo2 = '$codigo2', Fecha_registro = '$fecha_envio' 
+        WHERE IdUsuario = '$userId'";
+
+if ($conn->query($sql) === TRUE) {
+    echo json_encode(["status" => "success", "message" => "Códigos guardados correctamente en la tabla Alumnos"]);
 } else {
-    echo json_encode(['error' => 'Error al guardar las respuestas: ' . $conn->error]);
-    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "Error al guardar en Alumnos: " . $conn->error]);
 }
 
-// Cerrar la conexión
 $conn->close();
+?>

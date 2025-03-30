@@ -75,45 +75,87 @@ document.getElementById('studentForm').addEventListener('submit', async (e) => {
     }
 
     try {
-        // Cambia esta URL por la URL de tu script PHP en InfinityFree
-        const response = await fetch('http://javaexam.infinityfreeapp.com//guardar_respuestas.php', {
+        // Guardar en Firebase
+        const firebasePromise = new Promise((resolve, reject) => {
+            const datos = {
+                nombre: name,
+                matricula: matricula,
+                codigo1: code1,
+                codigo2: code2,
+                fechaEnvio: new Date().toISOString(),
+                tiempoUtilizado: 400 - timeLeft
+            };
+
+            database.ref('respuestas/' + matricula).set(datos)
+                .then(resolve)
+                .catch(reject);
+        });
+
+        // Guardar en MySQL (InfinityFree)
+        const mysqlPromise = fetch('./guardar_respuestas.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 nombre: name,
                 matricula: matricula,
-                code1: code1,
+                code1: code1, // Asegúrate de que coincida con lo que espera PHP
                 code2: code2
             })
-        });
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === "error") {
+                    throw new Error(data.message);
+                }
+                return data;
+            });
 
-        const result = await response.json();
+        // Ejecutar ambos guardados en paralelo
+        const [firebaseResult, mysqlResult] = await Promise.allSettled([firebasePromise, mysqlPromise]);
 
-        if (response.ok) {
+        // Verificar resultados
+        const firebaseSuccess = firebaseResult.status === 'fulfilled';
+        const mysqlSuccess = mysqlResult.status === 'fulfilled';
+
+        if (firebaseSuccess && mysqlSuccess) {
             Swal.fire({
                 icon: 'success',
                 title: 'Éxito',
-                text: 'Respuestas guardadas correctamente',
+                text: 'Respuestas guardadas en ambas bases de datos',
                 confirmButtonText: 'Entendido',
                 confirmButtonColor: '#3085d6'
             });
         } else {
+            let errorMessage = 'Respuestas guardadas parcialmente: ';
+            if (!firebaseSuccess) errorMessage += 'Error en Firebase: ' + firebaseResult.reason + '. ';
+            if (!mysqlSuccess) errorMessage += 'Error en MySQL: ' + mysqlResult.reason + '. ';
+
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: result.error || 'Error al guardar las respuestas',
+                icon: 'warning',
+                title: 'Advertencia',
+                text: errorMessage,
                 confirmButtonText: 'Entendido',
                 confirmButtonColor: '#3085d6'
             });
+        }
+
+        // Limpiar formulario si ambos guardados fueron exitosos
+        if (firebaseSuccess && mysqlSuccess) {
+            document.getElementById('studentForm').reset();
+            document.getElementById('editor1').value = '';
+            document.getElementById('editor2').value = '';
         }
     } catch (error) {
         console.error('Error al enviar las respuestas:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Error al conectar con el servidor',
+            text: 'Error al conectar con los servidores: ' + error.message,
             confirmButtonText: 'Entendido',
             confirmButtonColor: '#3085d6'
         });
@@ -138,8 +180,7 @@ const colorMap = new Map();
 
 // Función para generar un color claro aleatorio
 function getRandomColor() {
-    // Generar valores RGB entre 150 y 255 para colores claros
-    const r = Math.floor(Math.random() * 106) + 150; // Rango 150-255
+    const r = Math.floor(Math.random() * 106) + 150;
     const g = Math.floor(Math.random() * 106) + 150;
     const b = Math.floor(Math.random() * 106) + 150;
     return `rgb(${r}, ${g}, ${b})`;
@@ -161,23 +202,18 @@ function highlightCode(editorId) {
         const editor = document.getElementById(editorId);
         const highlight = document.getElementById('highlight' + editorId.substring(editorId.length - 1));
 
-        // Escapar el contenido para evitar problemas con HTML
         let code = editor.value.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
 
-        // Separar el código en palabras y símbolos
         let highlightedCode = code.replace(/(\w+)|([^\w\s])|(\s+)/g, (match, word, symbol, whitespace) => {
             if (whitespace) {
-                // Preservar los espacios en blanco sin envolverlos en un span
                 return whitespace;
             }
-            // Obtener o asignar un color para la palabra o símbolo
             const tokenColor = getColorForToken(match);
             return `<span style="color: ${tokenColor}">${match}</span>`;
         });
 
         highlight.innerHTML = highlightedCode;
 
-        // Opcional: Limpiar el mapa de colores para palabras que ya no están en el editor
         const currentTokens = new Set();
         code.match(/(\w+)|([^\w\s])/g)?.forEach(token => currentTokens.add(token));
         for (const token of colorMap.keys()) {
@@ -202,17 +238,14 @@ let hasShownWarning = false;
 
 // Función para manejar cambio de pestaña, salida o pérdida de foco
 function handleTabSwitchOrExit() {
-    // Borrar el contenido de los editores
     editor1.value = '';
     editor2.value = '';
 
-    // Actualizar los números de línea y el resaltado después de borrar
     updateLineNumbers('editor1', 'lines1');
     updateLineNumbers('editor2', 'lines2');
     highlightCode('editor1');
     highlightCode('editor2');
 
-    // Mostrar notificación solo si no se ha mostrado antes
     if (!hasShownWarning) {
         hasShownWarning = true;
         Swal.fire({
@@ -224,7 +257,6 @@ function handleTabSwitchOrExit() {
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(() => {
-            // Resetear la variable cuando el usuario hace clic en "Entendido"
             hasShownWarning = false;
         });
     }
@@ -235,7 +267,6 @@ let hasShownPasteWarning = false;
 
 // Función para manejar intento de pegar texto
 function handlePasteAttempt() {
-    // Mostrar notificación solo si no se ha mostrado antes
     if (!hasShownPasteWarning) {
         hasShownPasteWarning = true;
         Swal.fire({
@@ -247,7 +278,6 @@ function handlePasteAttempt() {
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(() => {
-            // Resetear la variable cuando el usuario hace clic en "Entendido"
             hasShownPasteWarning = false;
         });
     }
@@ -276,7 +306,6 @@ window.addEventListener('blur', () => {
 // Configurar eventos para los editores
 [editor1, editor2].forEach(editor => {
     editor.addEventListener('input', function () {
-        // Iniciar el temporizador al escribir
         if (!timerStarted) {
             timerStarted = true;
             updateTimer();
@@ -290,16 +319,14 @@ window.addEventListener('blur', () => {
         document.getElementById('highlight' + this.id.slice(-1)).scrollTop = this.scrollTop;
     });
 
-    // Detectar intento de pegar texto con el evento paste
     editor.addEventListener('paste', (e) => {
-        e.preventDefault(); // Prevenir la acción de pegar
+        e.preventDefault();
         handlePasteAttempt();
     });
 
-    // Detectar intento de pegar texto con Ctrl + V o Cmd + V
     editor.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
-            e.preventDefault(); // Prevenir la acción de pegar
+            e.preventDefault();
             handlePasteAttempt();
         }
     });
